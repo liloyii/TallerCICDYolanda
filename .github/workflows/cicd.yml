@@ -9,6 +9,12 @@ jobs:
     steps:
       - name: Cargar los ficheros de mi repo
         uses: actions/checkout@v6
-      - name: Vemos el contenido de la carpeta
-        run: ls -luah .
+      - name: Instalar node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Instalar el repositorio
+        run: npm install
+      - name: Build
+        run: npm run build
       

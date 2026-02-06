@@ -38,5 +38,11 @@ jobs:
             sudo service apache2 enable
             sudo service apache2 start
             sudo service apache2 status
+            mkdir -p ~/app_deploy
           '
-        
+          scp -i clave-aws.pem -o StrictHostKeyChecking=no -r ./dist/* ubuntu"{HOST}:~/app_deploy
+          ssh -o StrictHostKeyChecking=no -i clave-aws.pem ubuntu@${HOST} '
+            sudo mv ~/app_deploy/* /var/www/html
+            sudo chown -R www-data:www-data /var/www/html
+            sudo rm -rf ~/app_deploy
+          '

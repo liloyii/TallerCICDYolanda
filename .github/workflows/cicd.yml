@@ -13,10 +13,30 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Instalar el repositorio
         run: npm install
+
       - name: Haciendo los tests!
         run: npx vitest run
+
       - name: Build
         run: npm run build
-      
+
+      - name: Start deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+          HOST: ${{ vars.EC2_HOST }}
+        run: |
+          echo "$PRIVATE_KEY" > clave-aws.pem
+          chmod 600 clave-aws.pem
+          ssh -o StrictHostKeyChecking=no -i clave-aws.pem ubuntu@${HOST} '
+            echo "Carpeta: ${pwd}"
+            ls -la .
+            sudo apt update
+            sudo apt install -y apache2
+            sudo service apache2 enable
+            sudo service apache2 start
+            sudo service apache2 status
+          '
+        

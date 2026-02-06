@@ -15,6 +15,8 @@ jobs:
           node-version: 20
       - name: Instalar el repositorio
         run: npm install
+      - name: Haciendo los tests!
+        run: npx vitest run
       - name: Build
         run: npm run build
       
